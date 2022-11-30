@@ -17,6 +17,21 @@ export class GifsService {
   }
 
   constructor(private http: HttpClient) {
+
+    // Muestra Gifs por defecto al iniciar
+
+    if(localStorage.length == 0) {
+      const params = new HttpParams()
+        .set('api_key', this.apiKey)
+        .set('limit', '10');
+
+      this.http
+        .get<SearchGifsResponse>(`${this.apiUrl}/trending`, { params })
+        .subscribe((resp) => {
+          this.resultados = resp.data;
+        });
+    }
+
     this._historial = JSON.parse(localStorage.getItem('historial')!) || [];
     this.resultados = JSON.parse(localStorage.getItem('ultimaBusqueda')!) || [];
   }
